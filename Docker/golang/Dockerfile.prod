@@ -1,0 +1,22 @@
+FROM golang:1.23 AS builder
+
+WORKDIR /usr/src/app
+
+RUN go mod init hello.go && go mod tidy
+
+COPY . .
+
+# ENTRYPOINT ["go", "run"]
+
+# CMD ["."]
+
+
+FROM golang:1.23-alpine
+
+WORKDIR /usr/src/app
+
+COPY --from=builder /usr/src/app .
+
+ENTRYPOINT ["go", "run"]
+
+CMD ["."]
